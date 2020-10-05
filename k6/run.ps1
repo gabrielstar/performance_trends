@@ -1,0 +1,1 @@
+cat $PSScriptRoot/script.js | docker run -i loadimpact/k6 run --vus 500 --duration 20s -
