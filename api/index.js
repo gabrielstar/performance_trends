@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 
 app.get("/url", (req, res, next) => {
+    console.log("Request coming in ..");
     res.json(["Jmeter","Locust","Gatling","k6"]);
 });
 
