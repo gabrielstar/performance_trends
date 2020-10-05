@@ -4,4 +4,3 @@ cat $PSScriptRoot/script.js | `
             --summary-export=/data/export.json `
             --vus 5 `
             --duration 20s -
-#cat script.js | docker run -i loadimpact/k6 run --vus 5 --duration 20s -
