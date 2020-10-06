@@ -1,9 +1,13 @@
 var express = require("express");
 var app = express();
 
+function getTools() {
+    return ["Jmeter","Locust","Gatling","k6"]
+}
+
 app.get("/url", (req, res, next) => {
     console.log("Request coming in ..");
-    res.json(["Jmeter","Locust","Gatling","k6"]);
+    res.json(getTools());
 });
 
 app.listen(3000, () => {

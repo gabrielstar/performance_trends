@@ -1,3 +1,14 @@
 npm init
 npm install express --save
 node index.js
+
+#tests
+npm install chai mocha --save-dev
+npm install request --save-dev #http client
+
+#unit/integration
+npm test
+#perf
+npm run perf-test
+#or
+npm test && npm run perf-test
