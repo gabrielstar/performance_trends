@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "perf-test": "pwsh perf-test/run.ps1"
+    "perf-test": "pwsh perf-test/run.ps1",
+    "e2e-test" : "./node_modules/.bin/cypress run --spec \"cypress/integration/test_spec.js\"\n",
+    "all-test" : "pwsh test.ps1"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +16,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "cypress": "^5.3.0",
     "mocha": "^8.1.3",
     "request": "^2.88.2"
   }
