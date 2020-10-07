@@ -6,8 +6,7 @@
   "scripts": {
     "test": "mocha",
     "perf-test": "pwsh perf-test/run.ps1",
-    "e2e-test" : "./node_modules/.bin/cypress run --spec \"cypress/integration/test_spec.js\"\n",
-    "all-test" : "pwsh test.ps1"
+    "e2e-test" : "./node_modules/.bin/cypress run --spec \"cypress/integration/test_spec.js\"\n"
   },
   "author": "",
   "license": "ISC",
