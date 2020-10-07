@@ -1,7 +1,5 @@
 var expect  = require('chai').expect;
 var request = require('request');
-const { exec } = require("child_process");
-const index = require('../index');
 
 //https://buddy.works/guides/how-automate-nodejs-unit-tests-with-mocha-chai
 describe('E2E',function() {

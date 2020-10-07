@@ -1,5 +1,5 @@
 describe('HTML tests', () => {
-    it('should JMeter link be there!', () => {
+    it('should have JMeter link', () => {
         cy.visit('http://localhost:3000/tools')
         cy.contains('JMeter')
     })

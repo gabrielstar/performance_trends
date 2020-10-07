@@ -1,6 +1,9 @@
+$user=$env:UserName
 cat $PSScriptRoot/script.js | `
-    docker run --network="host" -i -v ${PWD}:/data `
+    docker run -i -v ${PSScriptRoot}:/data `
         loadimpact/k6 run `
-            --summary-export=/data/export.json `
-            --vus 5 `
-            --duration 20s -
+            --summary-export=/data/perf-test-results.json `
+            --vus 2 `
+            --tag user=$user `
+            --out csv=/data/results.csv `
+            --duration 5s -
