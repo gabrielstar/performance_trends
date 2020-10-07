@@ -1,20 +1,23 @@
-$script:testDir = "$PSScriptRoot\test_data\json"
-$script:OUT_FILE = "jmeter.csv"
+$script:testDir = "$PSScriptRoot\test_data\k6"
+$script:OUT_FILE = "k6_jmeter.csv"
+$script:TEST_FILE = "k6.csv"
 
 Describe 'Selenium Performance Data' {
 	BeforeAll {
-		Copy-Item "$testDir\*.json" -Destination "$TestDrive"
-		Remove-Item -Path $PSScriptRoot\test_data\json\*.csv
+		Copy-Item "$testDir\$script:TEST_FILE" -Destination "$TestDrive"
 		. $PSScriptRoot\parse-tests-results.ps1 -dryRun $true
-		ConvertJSONstoJmeterCSV -resultsPath $TestDrive
+		ConvertJSONstoJmeterCSV -resultsPath $TestDrive -resultsFile "$script:TEST_FILE" -outputFile "$script:OUT_FILE"
 	}
 	Context 'When I parse allure JSON results' {
-		It 'should create a jmeter.csv file ' {
+		It 'should create a jmeter file ' {
 			"$TestDrive\$script:OUT_FILE" | Should -Exist
 		}
-		It 'should jmeter.csv be correct file ' {
+		It 'should jmeter file be correct file ' {
 			$expected = Get-Content -Path "$TestDrive\$script:OUT_FILE"
-			$expected | Should -Be @('timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect', '1601901494174,12405,[SCENARIO] Check Objectivity about us page second time,200,OK,,text,true,,,,,,,,,', '1601901494179,5813,[STEP] Given  User is on objectivity page,200,OK,,text,true,,,,,,,,,', '1601901499993,5702,[STEP] When  User goes to about us page,200,OK,,text,true,,,,,,,,,', '1601901505696,877,[STEP] Then  User should be on "About Us | Objectivity" page,200,OK,,text,true,,,,,,,,,', '1601901494174,12405,[SCENARIO] Check Objectivity about us page second time,200,OK,,text,true,,,,,,,,,', '1601901494179,5813,[STEP] Given  User is on objectivity page,200,OK,,text,true,,,,,,,,,', '1601901499993,5702,[STEP] When  User goes to about us page,200,OK,,text,true,,,,,,,,,', '1601901505696,877,[STEP] Then  User should be on "About Us | Objectivity" page,200,OK,,text,true,,,,,,,,,')
+			$expected -contains `
+ 				@( '1602060604,2,/url,200,success,threadName,dataType,true,failureMessage,bytes,sentBytes,grpThreads,allThreads,http://localhost:3000/url,Latency,IdleTime,Connect') `
+ 				| Should -Be $true
+
 		}
 	}
 }
