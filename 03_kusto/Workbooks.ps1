@@ -4,9 +4,9 @@ param(
       $outFilePathCSV="$PSScriptRoot\test_data\k6\k6_jmeter_enriched.csv",
       $dryRun=$false,
       $jmeterArgs = 'k6',
-      $buildId = "$(Get-Date -Format "dd/MM/yyyy HH:mm K")",
+      $buildId = "$env:UserName - $(Get-Date -Format "dd/MM/yyyy HH:mm K")",
       $buildStatus = 'unknown',
-      $pipelineId = $env:UserName
+      $pipelineId = "$env:UserName"
 )
 
 Import-Module $PSScriptRoot\Workbooks.psm1 -Force

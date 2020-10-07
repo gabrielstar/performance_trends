@@ -5,37 +5,6 @@ param(
     $dryRun = $false
 )
 
-#each object has start, stop, status, name properties
-Function getRow($content, $type)
-{
-    $label = $type + $content.name.Trim()
-    $timeStamp = $content.start
-    $elapsed = $content.stop - $content.start
-    $responseCode = 200
-    $responseMessage = "OK"
-    $threadName = ""
-    $dataType = "text"
-    $success = "true"
-    $failureMessage = ""
-    $bytes = ""
-    $sendBytes = ""
-    $grpThreads = ""
-    $allThreads = ""
-    $URL = ""
-    $Latency = ""
-    $IdleTime = ""
-    $Connect = ""
-
-    if ($content.status -ne "passed")
-    {
-        $responseCode = 500
-        $responseMessage = "failed"
-        $success = "false"
-        $failureMessage = "Selenium Error"
-    }
-    $row = "$timeStamp,$elapsed,$label,$responseCode,$responseMessage,$threadName,$dataType,$success,$failureMessage,$bytes,$sendBytes,$grpThreads,$allThreads,$URL,$Latency,$IdleTime,$Connect"
-    return $row
-}
 Function resetFile($resultsPath, $convertedFileName)
 {
     $header = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect"
@@ -49,7 +18,8 @@ Function resetFile($resultsPath, $convertedFileName)
 }
 Function ConvertToJmeterRow($row,$rootURL){
 	$r=$row.split(',')
-	$timeStamp=$r[1]
+	$timeStamp=$r[1] -as [int]
+    $timeStamp = $timeStamp * 1000
 	$elapsed=[Math]::Floor([decimal]($r[2])) #round to integer ms
 	$label=$r[8] -replace $rootURL,''
 	$URL=$r[8]
