@@ -12,7 +12,7 @@ app.get("/url", (req, res, next) => {
 });
 app.get("/tools", (req, res, next) => {
     console.log("Request /tools coming in ..");
-    res.sendFile(path.join(__dirname+'/index.html'));
+    res.sendFile(path.join(__dirname+'/html/index.html'));
 });
 
 app.listen(3000, () => {
