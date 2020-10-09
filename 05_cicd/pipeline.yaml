@@ -27,9 +27,10 @@ jobs:
       displayName: Run
 
     - pwsh: |
-        cd 02_k6
+          ls -alh
+          cd 02_k6
           $user=$env:UserName
-          cat $PSScriptRoot/script.js | `
+          cat script.js | `
               docker run -i -v ${PSScriptRoot}:/data `
                   loadimpact/k6 run `
                       --summary-export=/data/perf-test-results.json `
