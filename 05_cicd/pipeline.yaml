@@ -1,14 +1,13 @@
-# This pipeline requires azure service connection of type "kubernetes service"
-# Remember to have 1-1 jmeter service to k8 node (VM)/pod ratio - otherwsie some slaves can crash due to lack of resources
 name: $(BuildID)
-trigger: none
-#config
-variables:
-  flag: default #edit
-triggers:
+trigger:
   bundle: true
   branch:
     - '*'
+#config
+variables:
+  flag: default #edit
+
+
 jobs:
   - job: Run_App
     displayName: CI_CD
