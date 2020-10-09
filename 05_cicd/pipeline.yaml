@@ -31,7 +31,7 @@ jobs:
         ls -alh $(System.DefaultWorkingDirectory)/02_k6/
         cd $(System.DefaultWorkingDirectory)/02_k6
         echo "Running diagnostics"
-        docker run --entrypoint="" -v $(System.DefaultWorkingDirectory)/02_k6/data:/media loadimpact/k6 sh -c "ls -alh && touch /media/foo"
+        sudo docker run --entrypoint="" -v $(System.DefaultWorkingDirectory)/02_k6/data:/media loadimpact/k6 sh -c "ls -alh && touch /media/foo"
         ls -alh $(System.DefaultWorkingDirectory)/02_k6/data
       displayName: Diagnostics
 
