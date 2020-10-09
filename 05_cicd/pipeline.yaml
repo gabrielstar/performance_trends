@@ -19,7 +19,7 @@ jobs:
     - bash: |
         mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
         chmod -R 0777 $(System.DefaultWorkingDirectory)/02_k6/data
-        cd $(System.DefaultWorkingDirectory)/01_api/data
+        cd $(System.DefaultWorkingDirectory)/01_api
       displayName: Prepare
 
     - script: npm test
