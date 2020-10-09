@@ -1,0 +1,8 @@
+1. Dockerize your node app - https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+
+cd ../01_api
+
+docker build -t gabrielstar/index.js . #build
+docker run -p 3000:3000 gabrielstar/index.js:latest #run
+
+
