@@ -22,6 +22,10 @@ jobs:
         cd $(System.DefaultWorkingDirectory)/01_api
       displayName: Prepare
 
+    - script: cd $(System.DefaultWorkingDirectory)/01_api && npm install
+      displayName: Install libs
+      condition: not(eq(variables.skip, false))
+
     - script: cd $(System.DefaultWorkingDirectory)/01_api && npm test
       displayName: Unit tests
       condition: not(eq(variables.skip, false))
