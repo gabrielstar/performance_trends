@@ -57,7 +57,7 @@ jobs:
 
     - pwsh: |
           cd $(System.DefaultWorkingDirectory)/02_k6
-          (Get-Content -Path .\script.js)  | `
+          (Get-Content -Path .\script.js) -replace 'host.docker.internal','localhost' | `
               docker run `
                    --net=host `
                    -i -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 `
