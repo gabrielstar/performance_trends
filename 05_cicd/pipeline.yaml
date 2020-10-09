@@ -20,7 +20,6 @@ jobs:
             cd 01_api
             ls $(System.DefaultWorkingDirectory)
             docker build -t gabrielstar/index.js .
-
         displayName: Build
 
       - bash: |
