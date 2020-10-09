@@ -17,11 +17,7 @@ jobs:
     timeoutInMinutes: 5
     steps:
     - bash: |
-          cd $(System.DefaultWorkingDirectory)
-          ls $(System.DefaultWorkingDirectory)
-          cd 01_api
-          ls $(System.DefaultWorkingDirectory)
-          docker build -t gabrielstar/index.js .
+        cd $(System.DefaultWorkingDirectory)/01_api && docker build -t gabrielstar/index.js .
       displayName: Build
 
     - bash: |
@@ -29,14 +25,13 @@ jobs:
       displayName: Run
 
     - pwsh: |
-          ls -alh
-          cd 02_k6
-          $user=$env:UserName
+          cd $(System.DefaultWorkingDirectory)/02_k6
           cat script.js | `
               docker run -i -v ${PSScriptRoot}:/data `
                   loadimpact/k6 run `
                       --summary-export=/data/perf-test-results.json `
                       --vus 2 `
-                      --tag user=$user `
+                      --tag user=cicd `
                       --out csv=/data/results.csv `
                       --duration 5s -
+      displayName: "Performance Tests"
