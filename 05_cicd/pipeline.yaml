@@ -6,7 +6,7 @@ trigger:
       - '*'
 #config
 variables:
-  skip: false #edit
+  skip: true #edit
 
 
 jobs:
@@ -20,6 +20,15 @@ jobs:
         mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
         chmod -R 0777 $(System.DefaultWorkingDirectory)/02_k6/data
       displayName: Prepare
+
+    - script: npm test
+      displayName: Unit tests
+      condition: not(eq(variables.skip, false))
+
+    - bash: |
+        cd .
+      displayName: Integration tests
+      condition: not(eq(variables.skip, false))
 
     - bash: |
         cd $(System.DefaultWorkingDirectory)/01_api && docker build -t gabrielstar/index.js .
