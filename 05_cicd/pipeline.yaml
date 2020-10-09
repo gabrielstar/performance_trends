@@ -19,14 +19,14 @@ jobs:
     - bash: |
         mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
         chmod -R 0777 $(System.DefaultWorkingDirectory)/02_k6/data
+        cd $(System.DefaultWorkingDirectory)/01_api/data
       displayName: Prepare
 
     - script: npm test
       displayName: Unit tests
       condition: not(eq(variables.skip, false))
 
-    - bash: |
-        cd .
+    - script: npm run e2e-test
       displayName: Integration tests
       condition: not(eq(variables.skip, false))
 
