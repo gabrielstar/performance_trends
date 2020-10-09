@@ -40,7 +40,7 @@ jobs:
       displayName: Run
       condition: not(eq(variables.skip, false))
 
-    - script: cd $(System.DefaultWorkingDirectory)/01_api &&  npm run cy:run-junit-reporter
+    - script: cd $(System.DefaultWorkingDirectory)/01_api && npm install --only-dev && npm run cy:run-junit-reporter
       displayName: Cypress tests
       condition: not(eq(variables.skip, false))
 
