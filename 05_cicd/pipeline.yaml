@@ -44,6 +44,13 @@ jobs:
       displayName: Cypress tests
       condition: not(eq(variables.skip, false))
 
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml'
+        failTaskOnFailedTests: true
+        testRunTitle: 'Cypress tests'
+
     - pwsh: |
           cd $(System.DefaultWorkingDirectory)/02_k6
           (Get-Content -Path .\script.js) -replace 'host.docker.internal','localhost'  | `
