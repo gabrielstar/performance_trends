@@ -22,7 +22,7 @@ jobs:
         cd $(System.DefaultWorkingDirectory)/01_api
       displayName: Prepare
 
-    - script: npm test
+    - script: cd $(System.DefaultWorkingDirectory)/01_api && npm test
       displayName: Unit tests
       condition: not(eq(variables.skip, false))
 
