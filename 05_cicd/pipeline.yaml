@@ -31,7 +31,7 @@ jobs:
         ls -alh $(System.DefaultWorkingDirectory)/02_k6/
         cd $(System.DefaultWorkingDirectory)/02_k6
         echo "Running diagnostics"
-        docker run --entrypoint="" -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 loadimpact/k6 sh -c "cd ~ && pwd && ls -alh ~/ && touch ~/foo"
+        docker run --entrypoint="" -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 loadimpact/k6 sh -c "whoami && cd ~ && pwd && ls -alh ~/ && touch ~/foo"
         ls -alh $(System.DefaultWorkingDirectory)/02_k6/data
       displayName: Diagnostics
 
