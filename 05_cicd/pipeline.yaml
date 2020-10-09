@@ -6,7 +6,7 @@ trigger:
       - '*'
 #config
 variables:
-  flag: default #edit
+  skip: false #edit
 
 
 jobs:
@@ -19,10 +19,12 @@ jobs:
     - bash: |
         cd $(System.DefaultWorkingDirectory)/01_api && docker build -t gabrielstar/index.js .
       displayName: Build
+      condition: not(eq(variables.skip, false))
 
     - bash: |
         docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
       displayName: Run
+      condition: not(eq(variables.skip, false))
 
     - bash: |
         mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
