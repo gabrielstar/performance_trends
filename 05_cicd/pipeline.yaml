@@ -30,10 +30,6 @@ jobs:
       displayName: Unit tests
       condition: not(eq(variables.skip, false))
 
-    - script: npm run e2e-test
-      displayName: Integration tests
-      condition: not(eq(variables.skip, false))
-
     - bash: |
         cd $(System.DefaultWorkingDirectory)/01_api && docker build -t gabrielstar/index.js .
       displayName: Build
@@ -42,6 +38,10 @@ jobs:
     - bash: |
         docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
       displayName: Run
+      condition: not(eq(variables.skip, false))
+
+    - script: cd $(System.DefaultWorkingDirectory)/01_api && npm run e2e-test
+      displayName: Cypress tests
       condition: not(eq(variables.skip, false))
 
     - pwsh: |
