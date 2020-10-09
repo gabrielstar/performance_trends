@@ -24,6 +24,13 @@ jobs:
         docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
       displayName: Run
 
+    - bash: |
+        mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
+        cd $(System.DefaultWorkingDirectory)/02_k6
+        echo "Running diagnostics"
+        docker run --entrypoint="" -v $(System.DefaultWorkingDirectory)/02_k6/data:/data loadimpact/k6 sh -c "ls -alh && touch /data/foo"
+        ls -alh $(System.DefaultWorkingDirectory)/02_k6/data
+      displayName: Diagnostics
     - pwsh: |
           mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
           cd $(System.DefaultWorkingDirectory)/02_k6
