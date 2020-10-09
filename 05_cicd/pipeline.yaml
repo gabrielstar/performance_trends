@@ -27,14 +27,14 @@ jobs:
           docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
         displayName: Run
 
-      -pwsh: |
-        cd 02_k6
-        $user=$env:UserName
-        cat $PSScriptRoot/script.js | `
-            docker run -i -v ${PSScriptRoot}:/data `
-                loadimpact/k6 run `
-                    --summary-export=/data/perf-test-results.json `
-                    --vus 2 `
-                    --tag user=$user `
-                    --out csv=/data/results.csv `
-                    --duration 5s -
+      - pwsh: |
+          cd 02_k6
+          $user=$env:UserName
+          cat $PSScriptRoot/script.js | `
+              docker run -i -v ${PSScriptRoot}:/data `
+                  loadimpact/k6 run `
+                      --summary-export=/data/perf-test-results.json `
+                      --vus 2 `
+                      --tag user=$user `
+                      --out csv=/data/results.csv `
+                      --duration 5s -
