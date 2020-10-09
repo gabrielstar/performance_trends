@@ -14,20 +14,20 @@ jobs:
       vmImage: 'ubuntu-latest'
     timeoutInMinutes: 5
     steps:
-       - bash: |
-            cd $(System.DefaultWorkingDirectory)
-            ls $(System.DefaultWorkingDirectory)
-            cd 01_api
-            ls $(System.DefaultWorkingDirectory)
-            docker build -t gabrielstar/index.js .
-        displayName: Build
+    - bash: |
+          cd $(System.DefaultWorkingDirectory)
+          ls $(System.DefaultWorkingDirectory)
+          cd 01_api
+          ls $(System.DefaultWorkingDirectory)
+          docker build -t gabrielstar/index.js .
+      displayName: Build
 
-      - bash: |
-          docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
-        displayName: Run
+    - bash: |
+        docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
+      displayName: Run
 
-      - pwsh: |
-          cd 02_k6
+    - pwsh: |
+        cd 02_k6
           $user=$env:UserName
           cat $PSScriptRoot/script.js | `
               docker run -i -v ${PSScriptRoot}:/data `
