@@ -5,8 +5,10 @@ trigger: none
 #config
 variables:
   flag: default #edit
-
-
+triggers:
+  bundle: true
+  branch:
+    - '*'
 jobs:
   - job: Run_App
     displayName: CI_CD
