@@ -1,8 +1,9 @@
 name: $(BuildID)
 trigger:
-  bundle: true
-  branch:
-    - '*'
+    bundle: true
+    branches:
+      include:
+      - '*'
 #config
 variables:
   flag: default #edit
