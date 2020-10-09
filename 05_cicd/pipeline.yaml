@@ -58,7 +58,7 @@ jobs:
     - pwsh: |
           cd $(System.DefaultWorkingDirectory)/02_k6
           (Get-Content -Path .\script.js)  | `
-              docker run -i -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 `
+              docker run --add-host=host.docker.internal:host-gateway -i -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 `
                   loadimpact/k6 run `
                       --summary-export=/home/k6/perf-test-results.json `
                       --vus 2 `
