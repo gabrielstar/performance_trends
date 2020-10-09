@@ -8,7 +8,7 @@ variables:
 
 
 jobs:
-  - job: Run App
+  - job: Run_App
     displayName: CI_CD
     pool:
       vmImage: 'ubuntu-latest'
