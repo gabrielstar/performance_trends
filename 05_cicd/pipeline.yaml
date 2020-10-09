@@ -39,12 +39,12 @@ jobs:
           mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
           cd $(System.DefaultWorkingDirectory)/02_k6
           echo "Running diagnostics"
-          docker run --entrypoint="" -v $(System.DefaultWorkingDirectory)/02_k6/data:/data loadimpact/k6 sh -c "ls -alh && touch /data/foo"
+          #docker run --entrypoint="" -v $(System.DefaultWorkingDirectory)/02_k6/data:/data loadimpact/k6 sh -c "ls -alh && touch /data/foo"
           ls -alh $(System.DefaultWorkingDirectory)/02_k6/data
           cat script.js | `
               docker run -i -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 `
                   loadimpact/k6 run `
-                      --summary-export=/data/perf-test-results.json `
+                      --summary-export=/home/k6/perf-test-results.json `
                       --vus 2 `
                       --tag user=cicd `
                       --out csv=/home/k6/results.csv `
