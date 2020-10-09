@@ -27,7 +27,7 @@ jobs:
     - pwsh: |
           cd $(System.DefaultWorkingDirectory)/02_k6
           cat script.js | `
-              docker run -i -v ${PSScriptRoot}:/data `
+              docker run -i -v ${PWD}:/data `
                   loadimpact/k6 run `
                       --summary-export=/data/perf-test-results.json `
                       --vus 2 `
