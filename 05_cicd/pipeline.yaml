@@ -1,6 +1,6 @@
 name: $(BuildID)
 trigger:
-    bundle: true
+    batch: true
     branches:
       include:
       - '*'
