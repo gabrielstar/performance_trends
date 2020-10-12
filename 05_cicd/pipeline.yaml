@@ -65,7 +65,7 @@ jobs:
                       --summary-export=/home/k6/perf-test-results.json `
                       --vus 2 `
                       --tag user=cicd `
-                      --out csv=/home/k6/results.csv `
+                      --out csv=/home/k6/k6.csv `
                       --duration 5s -
       displayName: "Performance Tests"
 
@@ -73,9 +73,9 @@ jobs:
       displayName: Perf Data normalization
       inputs:
         arguments: > # Use this to avoid newline characters in multiline string
-          -resultsPath = "$(System.DefaultWorkingDirectory)/02_k6/data",
-          -resultsFile = "k6.csv",
-          -outputFile = "k6_jmeter.csv",
+          -resultsPath = "$(System.DefaultWorkingDirectory)/02_k6/data"
+          -resultsFile = "k6.csv"
+          -outputFile = "k6_jmeter.csv"
         filePath: "$(System.DefaultWorkingDirectory)/03_kusto/parse-tests-results.ps1"
         pwsh: true
 
