@@ -53,7 +53,7 @@ jobs:
 
     - bash: |
         curl http://localhost:3000/tools
-      displayName: Verify app running
+      displayName: UAT tests
 
     - pwsh: |
           cd $(System.DefaultWorkingDirectory)/02_k6
