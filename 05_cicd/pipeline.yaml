@@ -38,6 +38,8 @@ stages:
         condition: not(eq(variables.skip, false))
 
 - stage: 'Run_Application'
+  dependsOn:
+    - 'Build_and_Unit_Tests'
   jobs:
     - job: Run_Application
       displayName: Run Application
@@ -48,6 +50,8 @@ stages:
         condition: not(eq(variables.skip, false))
 
 - stage: 'UAT_Tests'
+  dependsOn:
+    - 'Run_Application'
   jobs:
     - job: UAT_tests
       displayName: Run UAT Tests
@@ -68,6 +72,8 @@ stages:
         displayName: UAT tests
 
 - stage: 'Performance_Tests'
+  dependsOn:
+    - 'UAT_Tests'
   jobs:
     - job: Performance_tests
       displayName: Run Performance Tests
