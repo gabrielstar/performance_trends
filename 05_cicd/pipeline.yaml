@@ -12,10 +12,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: 'Build_and_Unit_Tests'
+- stage: 'CI_CD'
   jobs:
-    - job: Build_and_Tests
-      displayName: Build and run Unit Tests
+    - job: Build_Run_Test
+      displayName: Build, Run and Test Node App
       timeoutInMinutes: 5
       steps:
       - bash: |
@@ -37,10 +37,6 @@ stages:
         displayName: Build App
         condition: not(eq(variables.skip, false))
 
-- stage: 'Run_Application'
-  dependsOn:
-    - 'Build_and_Unit_Tests'
-  jobs:
     - job: Run_Application
       displayName: Run Application
       steps:
@@ -49,10 +45,6 @@ stages:
         displayName: Run App
         condition: not(eq(variables.skip, false))
 
-- stage: 'UAT_Tests'
-  dependsOn:
-    - 'Run_Application'
-  jobs:
     - job: UAT_tests
       displayName: Run UAT Tests
       steps:
@@ -71,10 +63,6 @@ stages:
           curl http://localhost:3000/tools
         displayName: UAT tests
 
-- stage: 'Performance_Tests'
-  dependsOn:
-    - 'UAT_Tests'
-  jobs:
     - job: Performance_tests
       displayName: Run Performance Tests
       steps:
