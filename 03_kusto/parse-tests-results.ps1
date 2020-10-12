@@ -45,7 +45,7 @@ Function ConvertJSONstoJMeterCSV($resultsPath, $resultsFile, $outputFile)
 	}
 }
 
-if (-Not$dryRun)
+if (-Not $dryRun)
 {
     Write-Host "Converting ..."
     ConvertJSONstoJmeterCSV -resultsPath $resultsPath -resultsFile $resultsFile -outputFile $outputFile
