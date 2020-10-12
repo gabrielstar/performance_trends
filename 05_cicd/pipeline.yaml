@@ -37,17 +37,11 @@ stages:
         displayName: Build App
         condition: not(eq(variables.skip, false))
 
-    - job: Run_Application
-      displayName: Run Application
-      steps:
       - bash: |
           docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
         displayName: Run App
         condition: not(eq(variables.skip, false))
 
-    - job: UAT_tests
-      displayName: Run UAT Tests
-      steps:
       - script: cd $(System.DefaultWorkingDirectory)/01_api && ./node_modules/.bin/cypress run --spec cypress/integration/test_spec.js
         displayName: Cypress tests
         condition: not(eq(variables.skip, false))
@@ -63,9 +57,6 @@ stages:
           curl http://localhost:3000/tools
         displayName: UAT tests
 
-    - job: Performance_tests
-      displayName: Run Performance Tests
-      steps:
       - pwsh: |
             cd $(System.DefaultWorkingDirectory)/02_k6
             (Get-Content -Path .\script.js) -replace 'host.docker.internal','localhost' | `
