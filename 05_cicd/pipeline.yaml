@@ -12,7 +12,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: 'Build and Unit Tests'
+- stage: 'Build_and_Unit_Tests'
   jobs:
     - job: Build_and_Tests
       displayName: Build and run Unit Tests
@@ -37,7 +37,7 @@ stages:
         displayName: Build App
         condition: not(eq(variables.skip, false))
 
-- stage: 'Run Application'
+- stage: 'Run_Application'
   jobs:
     - job: Run_Application
       displayName: Run Application
@@ -47,6 +47,11 @@ stages:
         displayName: Run App
         condition: not(eq(variables.skip, false))
 
+- stage: 'UAT_Tests'
+  jobs:
+    - job: UAT_tests
+      displayName: Run UAT Tests
+      steps:
       - script: cd $(System.DefaultWorkingDirectory)/01_api && ./node_modules/.bin/cypress run --spec cypress/integration/test_spec.js
         displayName: Cypress tests
         condition: not(eq(variables.skip, false))
@@ -62,6 +67,11 @@ stages:
           curl http://localhost:3000/tools
         displayName: UAT tests
 
+- stage: 'Performance_Tests'
+  jobs:
+    - job: Performance_tests
+      displayName: Run Performance Tests
+      steps:
       - pwsh: |
             cd $(System.DefaultWorkingDirectory)/02_k6
             (Get-Content -Path .\script.js) -replace 'host.docker.internal','localhost' | `
