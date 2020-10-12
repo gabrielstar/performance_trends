@@ -8,86 +8,93 @@ trigger:
 variables:
   skip: true #edit
 
+pool:
+  vmImage: 'ubuntu-latest'
 
-jobs:
-  - job: Run_App
-    displayName: CI_CD
-    pool:
-      vmImage: 'ubuntu-latest'
-    timeoutInMinutes: 5
-    steps:
-    - bash: |
-        mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
-        chmod -R 0777 $(System.DefaultWorkingDirectory)/02_k6/data
-        cd $(System.DefaultWorkingDirectory)/01_api
-      displayName: Prepare
+stages:
+- stage: 'Build and Unit Tests'
+  jobs:
+    - job: Build_and_Tests
+      displayName: Build and run Unit Tests
+      timeoutInMinutes: 5
+      steps:
+      - bash: |
+          mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
+          chmod -R 0777 $(System.DefaultWorkingDirectory)/02_k6/data
+          cd $(System.DefaultWorkingDirectory)/01_api
+        displayName: Prepare
 
-    - script: cd $(System.DefaultWorkingDirectory)/01_api && npm install
-      displayName: Install libs
-      condition: not(eq(variables.skip, false))
+      - script: cd $(System.DefaultWorkingDirectory)/01_api && npm install
+        displayName: Install libs
+        condition: not(eq(variables.skip, false))
 
-    - script: cd $(System.DefaultWorkingDirectory)/01_api && npm test
-      displayName: Unit tests
-      condition: not(eq(variables.skip, false))
+      - script: cd $(System.DefaultWorkingDirectory)/01_api && npm test
+        displayName: Unit tests
+        condition: not(eq(variables.skip, false))
 
-    - bash: |
-        cd $(System.DefaultWorkingDirectory)/01_api && docker build -t gabrielstar/index.js .
-      displayName: Build App
-      condition: not(eq(variables.skip, false))
+      - bash: |
+          cd $(System.DefaultWorkingDirectory)/01_api && docker build -t gabrielstar/index.js .
+        displayName: Build App
+        condition: not(eq(variables.skip, false))
 
-    - bash: |
-        docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
-      displayName: Run App
-      condition: not(eq(variables.skip, false))
+- stage: 'Run Application'
+  jobs:
+    - job: Run_Application
+      displayName: Run Application
+      steps:
+      - bash: |
+          docker run --name index.js -d --rm -p 3000:3000 gabrielstar/index.js
+        displayName: Run App
+        condition: not(eq(variables.skip, false))
 
-    - script: cd $(System.DefaultWorkingDirectory)/01_api && ./node_modules/.bin/cypress run --spec cypress/integration/test_spec.js
-      displayName: Cypress tests
-      condition: not(eq(variables.skip, false))
+      - script: cd $(System.DefaultWorkingDirectory)/01_api && ./node_modules/.bin/cypress run --spec cypress/integration/test_spec.js
+        displayName: Cypress tests
+        condition: not(eq(variables.skip, false))
 
-    - task: PublishTestResults@2
-      inputs:
-        testResultsFormat: 'JUnit'
-        testResultsFiles: '**/TEST-*.xml'
-        failTaskOnFailedTests: true
-        testRunTitle: 'Cypress tests'
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/TEST-*.xml'
+          failTaskOnFailedTests: true
+          testRunTitle: 'Cypress tests'
 
-    - bash: |
-        curl http://localhost:3000/tools
-      displayName: UAT tests
+      - bash: |
+          curl http://localhost:3000/tools
+        displayName: UAT tests
 
-    - pwsh: |
-          cd $(System.DefaultWorkingDirectory)/02_k6
-          (Get-Content -Path .\script.js) -replace 'host.docker.internal','localhost' | `
-              docker run `
-                   --net=host `
-                   -i -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 `
-                      loadimpact/k6 run `
-                      --summary-export=/home/k6/perf-test-results.json `
-                      --vus 2 `
-                      --tag user=cicd `
-                      --out csv=/home/k6/k6.csv `
-                      --duration 5s -
-      displayName: "Performance Tests"
+      - pwsh: |
+            cd $(System.DefaultWorkingDirectory)/02_k6
+            (Get-Content -Path .\script.js) -replace 'host.docker.internal','localhost' | `
+                docker run `
+                     --net=host `
+                     -i -v $(System.DefaultWorkingDirectory)/02_k6/data:/home/k6 `
+                        loadimpact/k6 run `
+                        --summary-export=/home/k6/perf-test-results.json `
+                        --vus 2 `
+                        --tag user=cicd `
+                        --out csv=/home/k6/k6.csv `
+                        --duration 5s -
+        displayName: "Performance Tests"
 
-    - task: PowerShell@2
-      displayName: Perf Data normalization
-      inputs:
-        arguments: > # Use this to avoid newline characters in multiline string
-          -resultsPath = "$(System.DefaultWorkingDirectory)/02_k6/data"
-          -resultsFile = "k6.csv"
-          -outputFile = "k6_jmeter.csv"
-        filePath: "$(System.DefaultWorkingDirectory)/03_kusto/parse-tests-results.ps1"
-        pwsh: true
+      - task: PowerShell@2
+        displayName: Perf Data normalization
+        inputs:
+          arguments: > # Use this to avoid newline characters in multiline string
+            -resultsPath "$(System.DefaultWorkingDirectory)/02_k6/data"
+            -resultsFile "k6.csv"
+            -outputFile "k6_jmeter.csv"
+          filePath: "$(System.DefaultWorkingDirectory)/03_kusto/parse-tests-results.ps1"
+          pwsh: true
 
-    - task: PowerShell@2
-      displayName: Perf Data Analytics upload
-      inputs:
-        arguments: > # Use this to avoid newline characters in multiline string
-          -propertiesPath "$(System.DefaultWorkingDirectory)/03_kusto/workbooks.azure.properties"
-          -filePathCSV "$(System.DefaultWorkingDirectory)/02_k6/data/k6_jmeter.csv"
-          -JmeterArgs "k6"
-          -BuildId "$(Build.BuildId)"
-          -BuildStatus "$(Agent.JobStatus)"
-          -PipelineId "$(System.DefinitionId)"
-        filePath: "$(System.DefaultWorkingDirectory)/03_kusto/Workbooks.ps1"
-        pwsh: true
+      - task: PowerShell@2
+        displayName: Perf Data Analytics upload
+        inputs:
+          arguments: > # Use this to avoid newline characters in multiline string
+            -propertiesPath "$(System.DefaultWorkingDirectory)/03_kusto/workbooks.azure.properties"
+            -filePathCSV "$(System.DefaultWorkingDirectory)/02_k6/data/k6_jmeter.csv"
+            -JmeterArgs "k6"
+            -BuildId "$(Build.BuildId)"
+            -BuildStatus "$(Agent.JobStatus)"
+            -PipelineId "$(System.DefinitionId)"
+          filePath: "$(System.DefaultWorkingDirectory)/03_kusto/Workbooks.ps1"
+          pwsh: true
