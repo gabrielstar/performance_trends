@@ -68,3 +68,16 @@ jobs:
                       --out csv=/home/k6/results.csv `
                       --duration 5s -
       displayName: "Performance Tests"
+
+    - task: PowerShell@2
+      displayName: Workbooks upload
+      inputs:
+        arguments: > # Use this to avoid newline characters in multiline string
+          -propertiesPath "$(System.DefaultWorkingDirectory)/03_kusto/workbooks.azure.properties"
+          -filePathCSV "$(System.DefaultWorkingDirectory)/02_k6/data/perf-test-results.json"
+          -JmeterArgs "k6"
+          -BuildId "$(Build.BuildId)"
+          -BuildStatus "$(Agent.JobStatus)"
+          -PipelineId "$(System.DefinitionId)"
+        filePath: "$(System.DefaultWorkingDirectory)/03_kusto/Workbooks.ps1"
+        pwsh: true
