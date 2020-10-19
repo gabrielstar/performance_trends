@@ -64,6 +64,7 @@ Function run(){
     If( -Not $dryRun)
     {
         Write-Host "Uploading file with size $sizeMB MB"
+        Write-Host (Get-Content -Path $outFilePathCSV)
         $status = sendJMeterDataToLogAnalytics `
                             -propertiesPath "$propertiesPath" `
                             -filePathCSV "$outFilePathCSV"
