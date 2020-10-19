@@ -13,10 +13,15 @@ npm test
 #perf
 npm run perf-test
 #or
-npm test -and npm run perf-test
+npm test; npm run e2e-test; npm run perf-test
 
 #cypress
 npm install cypress --save-dev
 ./node_modules/.bin/cypress open
-#modify pacjage.json
+#modify package.json
 npm run e2e-test
+
+#telemetria
+
+npm install applicationinsights --save
+#follow https://docs.microsoft.com/en-us/azure/azure-monitor/app/nodejs
