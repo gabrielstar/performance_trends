@@ -1,1 +1,0 @@
-https://support.stackpath.com/hc/en-us/articles/360022805791-Edge-Computing-Building-a-Containerized-NodeJS-Web-App
