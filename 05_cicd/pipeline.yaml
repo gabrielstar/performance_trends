@@ -94,3 +94,7 @@ stages:
             -PipelineId "$(System.DefinitionId)"
           filePath: "$(System.DefaultWorkingDirectory)/03_kusto/Workbooks.ps1"
           pwsh: true
+
+      - bash: |
+          cat "$(System.DefaultWorkingDirectory)/02_k6/data/k6_jmeter_enriched.csv"
+        displayName: Display results
