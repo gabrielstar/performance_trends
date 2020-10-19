@@ -35,7 +35,12 @@ Function sendJMeterDataToLogAnalytics($propertiesPath, $filePathCSV)
 Function addMetaDataToCSV($filePathCSV, $outFilePathCSV ){
     $inputTempFile = New-TemporaryFile
     $outputTempFile = New-TemporaryFile
+
+
     Copy-Item -Path $filePathCSV -Destination $inputTempFile
+
+    Write-Host "Starting with file .."
+    Get-Content -Path $inputTempFile
     $hash = [ordered]@{
         jmeterArgs = $jmeterArgs
         buildId = $buildId
@@ -46,8 +51,12 @@ Function addMetaDataToCSV($filePathCSV, $outFilePathCSV ){
         #Write-Host "$($h.Name): $($h.Value)"
         AddColumnToCSV -filePathCSV $inputTempFile -outFilePathCSV $outputTempFile -columnHeader "$($h.Name)" -columnFieldsValue "$($h.Value)"
         Copy-Item -Path $outputTempFile -Destination $inputTempFile
+        Write-Host "Modified file .."
+        Get-Content -Path $inputTempFile
     }
     Copy-Item $inputTempFile -Destination $outFilePathCSV
+    Write-Host "Final file .."
+    Get-Content -Path $outFilePathCSV
 }
 Function run(){
     Write-Host "Used properties: propertiesPath $propertiesPath"
