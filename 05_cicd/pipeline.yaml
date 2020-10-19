@@ -21,6 +21,7 @@ stages:
       - bash: |
           mkdir -p $(System.DefaultWorkingDirectory)/02_k6/data
           chmod -R 0777 $(System.DefaultWorkingDirectory)/02_k6/data
+          chmod -R 0777 $(System.DefaultWorkingDirectory)/03_kusto/test_data
           cd $(System.DefaultWorkingDirectory)/01_api
         displayName: Prepare
 
