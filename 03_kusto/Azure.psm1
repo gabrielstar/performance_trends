@@ -40,6 +40,7 @@ Function PostLogAnalyticsData($customerId, $sharedKey, $body, $logType)
     }
 
     $response = Invoke-WebRequest -Uri $uri -Method $method -ContentType $contentType -Headers $headers -Body $body -UseBasicParsing
+    Write-Host "resp: " + $response.RawContent
     return $response.StatusCode
 
 }

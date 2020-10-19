@@ -99,3 +99,9 @@ stages:
           cat "$(System.DefaultWorkingDirectory)/02_k6/data/k6_jmeter_enriched.csv"
           cat "$(System.DefaultWorkingDirectory)/03_kusto/test_data/results.json"
         displayName: Display results
+
+      - task: PublishPipelineArtifact@1
+        displayName: Archive Artifacts
+        inputs:
+          path: "$(System.DefaultWorkingDirectory)/03_kusto/test_data/results.json"
+          artifact: results.json
