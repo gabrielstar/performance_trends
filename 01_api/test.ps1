@@ -1,1 +1,1 @@
-npm test;npm perf-test;npm e2e-test
+npm test;npm run perf-test;npm run e2e-test

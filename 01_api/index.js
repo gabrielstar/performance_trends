@@ -2,7 +2,6 @@ var express = require("express");
 var app = express();
 const path = require('path');
 
-
 function getTools() {
     return ["Jmeter","Locust","Gatling","k6"]
 }
