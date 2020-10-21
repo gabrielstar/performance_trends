@@ -4,6 +4,6 @@ import { sleep } from 'k6';
 
 export default function() {
   let localhost = 'host.docker.internal'
-  http.get(`http://${localhost}:3000/url`);
+  http.get(`http://${localhost}:3000/tools`);
   //sleep(1);
 }

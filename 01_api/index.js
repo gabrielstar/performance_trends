@@ -2,6 +2,13 @@ var express = require("express");
 var app = express();
 const path = require('path');
 
+
+let appInsights = require('applicationinsights');
+appInsights.setup('klucz');
+appInsights.defaultClient.config.samplingPercentage = 100;
+appInsights.start();
+
+
 function getTools() {
     return ["Jmeter","Locust","Gatling","k6"]
 }
